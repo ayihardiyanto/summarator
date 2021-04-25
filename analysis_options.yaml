@@ -1,0 +1,217 @@
+# Specify analysis options.
+#
+# Until there are meta linter rules, each desired lint must be explicitly enabled.
+# See: https://github.com/dart-lang/linter/issues/288
+#
+# For a list of lints, see: http://dart-lang.github.io/linter/lints/
+# See the configuration guide for more
+# https://github.com/dart-lang/sdk/tree/master/pkg/analyzer#configuring-the-analyzer
+#
+# There are other similar analysis options files in the flutter repos,
+# which should be kept in sync with this file:
+#
+#   - analysis_options.yaml (this file)
+#   - packages/flutter/lib/analysis_options_user.yaml
+#   - https://github.com/flutter/plugins/blob/master/analysis_options.yaml
+#   - https://github.com/flutter/engine/blob/master/analysis_options.yaml
+#
+# This file contains the analysis options used by Flutter tools, such as IntelliJ,
+# Android Studio, and the `flutter analyze` command.
+
+include: package:pedantic/analysis_options.yaml
+
+analyzer:
+  strong-mode:
+    #implicit-casts: false
+    #implicit-dynamic: false
+    implicit-casts: true
+    implicit-dynamic: true
+  errors:
+    # treat missing required parameters as a warning (not a hint)
+    missing_required_param: warning
+    # treat missing returns as a warning (not a hint)
+    missing_return: warning
+    # allow having TODOs in the code
+    todo: ignore
+    # Ignore analyzer hints for updating pubspecs when using Future or
+    # Stream and not importing dart:async
+    # Please see https://github.com/flutter/flutter/pull/24528 for details.
+    sdk_version_async_exported_from_core: ignore
+  exclude:
+    - "bin/cache/**"
+    # the following two are relative to the stocks example and the flutter package respectively
+    # see https://github.com/dart-lang/sdk/issues/28463
+    - "lib/i18n/messages_*.dart"
+    - "lib/src/http/**"
+    - "lib/common/config/injector.iconfig.dart"
+    - "lib/data/datasources/local/databases/tables/*.g.dart"
+
+  enable-experiment:
+    - extension-methods
+
+linter:
+  rules:
+    # these rules are documented on and in the same order as
+    # the Dart Lint rules page to make maintenance easier
+    # https://github.com/dart-lang/linter/blob/master/example/all.yaml
+    always_declare_return_types : true
+    # pedantic-proposed - always_put_control_body_on_new_line
+    # - always_put_required_named_parameters_first # we prefer having parameters in the same order as fields https://github.com/flutter/flutter/issues/10219
+    always_require_non_null_named_parameters : true
+    # pedantic-proposed - always_specify_types
+    annotate_overrides : true
+    # - avoid_annotating_with_dynamic # conflicts with always_specify_types
+    # - avoid_as # required for implicit-casts: true
+    avoid_bool_literals_in_conditional_expressions : true
+    # - avoid_catches_without_on_clauses # we do this commonly
+    # - avoid_catching_errors # we do this commonly
+    # pedantic-proposed - avoid_classes_with_only_static_members
+    # - avoid_double_and_int_checks # only useful when targeting JS runtime
+    avoid_empty_else : true
+    # Pedantic Proposed - avoid_equals_and_hash_code_on_mutable_classes # would require the @immutable annotation to be consistently and correctly used everywhere.
+    # pedantic Proposed - avoid_field_initializers_in_const_classes # does not offer a clear readability benefit.
+    avoid_function_literals_in_foreach_calls : true
+    # - avoid_implementing_value_types # not yet tested
+    avoid_init_to_null : true
+    # - avoid_js_rounded_ints # only useful when targeting JS runtime
+    avoid_null_checks_in_equality_operators : true
+    # - avoid_positional_boolean_parameters # not yet tested
+    # - avoid_print # not yet tested
+    # - avoid_private_typedef_functions # we prefer having typedef (discussion in https://github.com/flutter/flutter/pull/16356)
+    # - avoid_redundant_argument_values # not yet tested
+    avoid_relative_lib_imports : true
+    avoid_renaming_method_parameters : true
+    avoid_return_types_on_setters : true
+    # - avoid_returning_null # there are plenty of valid reasons to return null
+    # - avoid_returning_null_for_future # not yet tested
+    avoid_returning_null_for_void : true
+    # - avoid_returning_this # there are plenty of valid reasons to return this
+    # - avoid_setters_without_getters # not yet tested
+    # - avoid_shadowing_type_parameters # not yet tested
+    avoid_single_cascade_in_expression_statements : true
+    # pedantic-proposed - avoid_slow_async_io # gives wrong advice if the underlying filesystem has unusual properties, for example a network mount.
+    avoid_types_as_parameter_names : true
+    # - avoid_types_on_closure_parameters # conflicts with always_specify_types
+    # - avoid_unnecessary_containers # not yet tested
+    avoid_unused_constructor_parameters : true
+    # pedantic-proposed - avoid_void_async # prevents a valid style where an asynchronous method has a void return type to indicate that nobody should await for the result.
+    # - avoid_web_libraries_in_flutter # not yet tested
+    await_only_futures : true
+    camel_case_extensions : true
+    camel_case_types : true
+    # pedantic Proposed - cancel_subscriptions #has false positives when you use a utility method or class to call cancel.
+    # - cascade_invocations # not yet tested
+    # - close_sinks # not reliable enough
+    # - comment_references # blocked on https://github.com/flutter/flutter/issues/20765
+    # - constant_identifier_names # needs an opt-out https://github.com/dart-lang/linter/issues/204
+    # pedantic-proposed - control_flow_in_finally # does not offer enough value: people are unlikely to do this by accident, and there are occasional valid uses.
+    # - curly_braces_in_flow_control_structures # not yet tested
+    # - diagnostic_describe_all_properties # not yet tested
+    # pedantic-proposed - directives_ordering #would enforce a slightly different ordering to that used by IntelliJ and other tools using the analyzer.
+    empty_catches : true
+    empty_constructor_bodies : true
+    # pedantic-proposed - empty_statements #is superfluous, enforcing use of dartfmt is sufficient to make empty statements obvious.
+    # - file_names # not yet tested
+    # pedantic-proposed - flutter_style_todos #is for Flutter SDK internal use, see note about Flutter SDK style below.
+    hash_and_equals : true
+    implementation_imports : true
+    # - invariant_booleans # too many false positives: https://github.com/dart-lang/linter/issues/811
+    iterable_contains_unrelated_type : true
+    # - join_return_with_assignment # not yet tested
+    library_names : true
+    library_prefixes : true
+    # - lines_longer_than_80_chars # not yet tested
+    list_remove_unrelated_type : true
+    # - literal_only_boolean_expressions # too many false positives: https://github.com/dart-lang/sdk/issues/34181
+    # - missing_whitespace_between_adjacent_strings # not yet tested
+    # pedantic-proposed - no_adjacent_strings_in_list #does not offer enough value: adjacent strings in lists are easily spotted when the code is formatted with dartfmt.
+    no_duplicate_case_values : true
+    # - no_logic_in_create_state # not yet tested
+    # - no_runtimeType_toString # not yet tested
+    non_constant_identifier_names : true
+    # - null_closures  # not yet tested
+    omit_local_variable_types : false
+    # - one_member_abstracts # too many false positives
+    # - only_throw_errors # https://github.com/flutter/flutter/issues/5792
+    overridden_fields : true
+    package_api_docs : true
+    package_names : true
+    package_prefixed_library_names : true
+    # - parameter_assignments # we do this commonly 
+    prefer_adjacent_string_concatenation : true
+    # pedantic - prefer_asserts_in_initializer_lists # does not reflect common usage.
+    # - prefer_asserts_with_message # not yet tested
+    prefer_collection_literals : true
+    prefer_conditional_assignment : true
+    # pedantic - prefer_const_constructors # would add a lot of noise to code now that new is optional.
+    # pedantic - prefer_const_constructors_in_immutables #does not often apply as @immutable is not widely used.
+    prefer_const_declarations : true
+    # pedantic - prefer_const_literals_to_create_immutables # is too strict, requiring const everywhere adds noise
+    # - prefer_constructors_over_static_methods # not yet tested
+    prefer_contains : true
+    # - prefer_double_quotes # opposite of prefer_single_quotes
+    prefer_equal_for_default_values : true
+    # - prefer_expression_function_bodies # conflicts with https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#consider-using--for-short-functions-and-methods
+    prefer_final_fields : true
+    # pedantic - prefer_final_in_for_each #does not reflect common usage.
+    # pedantic - prefer_final_locals #does not reflect common usage.
+    prefer_for_elements_to_map_fromIterable : true
+    # pedantic - prefer_foreach # is too strict; forEach is not always an improvement.
+    # - prefer_function_declarations_over_variables # not yet tested
+    prefer_generic_function_type_aliases : true
+    prefer_if_elements_to_conditional_expressions : true
+    prefer_if_null_operators : true
+    prefer_initializing_formals : true
+    prefer_inlined_adds : true
+    # - prefer_int_literals # not yet tested
+    # - prefer_interpolation_to_compose_strings # not yet tested
+    prefer_is_empty : true
+    prefer_is_not_empty : true
+    prefer_is_not_operator : true
+    prefer_iterable_whereType : true
+    # - prefer_mixin # https://github.com/dart-lang/language/issues/32
+    # - prefer_null_aware_operators # disable until NNBD, see https://github.com/flutter/flutter/pull/32711#issuecomment-492930932
+    # - prefer_relative_imports # not yet tested
+    prefer_single_quotes : true
+    prefer_spread_collections : true
+    # pedantic - prefer_typing_uninitialized_variables #will be obsoleted by NNBD, which comes with type inference for uninitialized variables.
+    prefer_void_to_null : true
+    # - provide_deprecation_message # not yet tested
+    # - public_member_api_docs # enabled on a case-by-case basis; see e.g. packages/analysis_options.yaml
+    recursive_getters : true
+    slash_for_doc_comments : true
+    # - sort_child_properties_last # not yet tested
+    # - sort_constructors_first #does not reflect common usage.
+    sort_pub_dependencies : true
+    # pedantic - sort_unnamed_constructors_first #is too strict, people are free to choose the best constructor ordering.
+    # pedantic - test_types_in_equals # does not offer enough value: there are plenty of other mistakes possible in operator == implementations. It's better to use codegen.
+    # pedantic - throw_in_finally
+    # - type_annotate_public_apis # subset of always_specify_types #does not offer enough value: people are unlikely to do this by accident, and there are occasional valid uses.
+    type_init_formals : true
+    # - unawaited_futures # too many false positives
+    # - unnecessary_await_in_return # not yet tested
+    unnecessary_brace_in_string_interps : true
+    unnecessary_const : true
+    # - unnecessary_final # conflicts with prefer_final_locals
+    unnecessary_getters_setters : true
+    # - unnecessary_lambdas # has false positives: https://github.com/dart-lang/linter/issues/498
+    unnecessary_new : true
+    # pedantic - unnecessary_null_aware_assignments #does not offer enough value: this is hard to do by mistake, and harmless.
+    unnecessary_null_in_if_null_operators : true
+    unnecessary_overrides : true
+    unnecessary_parenthesis : true
+    unnecessary_statements : true
+    # - unnecessary_string_interpolations
+    # - unnecessary_string_interpolations
+    unnecessary_this : true
+    unrelated_type_equality_checks : true
+    # - unsafe_html # not yet tested
+    use_full_hex_values_for_flutter_colors : true
+    # - use_function_type_syntax_for_parameters # not yet tested
+    # - use_key_in_widget_constructors # not yet tested
+    use_rethrow_when_possible : true
+    # - use_setters_to_change_properties # not yet tested
+    # - use_string_buffers # has false positives: https://github.com/dart-lang/sdk/issues/34182
+    # - use_to_and_as_if_applicable # has false positives, so we prefer to catch this by code-review
+    alid_regexps : true
+    void_checks : true
