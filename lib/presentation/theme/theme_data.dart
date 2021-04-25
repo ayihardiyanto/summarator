@@ -7,4 +7,5 @@ final themeData = ThemeData(
   fontFamily: FontFamilyConstants.ttCommons,
   primaryColor: Blue.teal,
   accentColor: Red.pinkyBlush,
+  buttonColor: Blue.teal,
 );

@@ -16,6 +16,7 @@ import '../../data/repos/user_firebase_repository.dart' as _i11;
 import '../../domain/repos/summary_repository.dart' as _i7;
 import '../../domain/repos/user_firebase_repository.dart' as _i10;
 import '../../domain/usecases/summary_usecase.dart' as _i12;
+import '../../presentation/screen/summarator/bloc/summarize_bloc.dart' as _i13;
 import '../utils/network_check.dart'
     as _i5; // ignore_for_file: unnecessary_lambdas
 
@@ -36,5 +37,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
           firebaseAuthDatasource: get<_i3.FirebaseAuthDatasource>()));
   gh.factory<_i12.GetSummaryUsecase>(() =>
       _i12.GetSummaryUsecase(summaryRepository: get<_i7.ISummaryRepository>()));
+  gh.factory<_i13.SummarizeBloc>(() =>
+      _i13.SummarizeBloc(getSummaryUsecase: get<_i12.GetSummaryUsecase>()));
   return get;
 }
