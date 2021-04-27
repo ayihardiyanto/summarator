@@ -27,29 +27,36 @@ class InputCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (inputController.text.isNotEmpty)
-              Container(
-                height: hdp(30),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      SummaratorString.originalText,
-                      style: TextStyles.ttCommons.copyWith(
-                        fontSize: 13,
-                      ),
+              BlocBuilder<SummarizeBloc, SummarizeState>(
+                builder: (context, state) {
+                  if (state is SummaryDismissed) {
+                    return Container();
+                  }
+                  return Container(
+                    height: hdp(30),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          SummaratorString.originalText,
+                          style: TextStyles.ttCommons.copyWith(
+                            fontSize: 13,
+                          ),
+                        ),
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          icon: Icon(Icons.clear),
+                          onPressed: () {
+                            inputController.clear();
+                            BlocProvider.of<SummarizeBloc>(context).add(
+                              DismissSummary(),
+                            );
+                          },
+                        )
+                      ],
                     ),
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        inputController.clear();
-                        BlocProvider.of<SummarizeBloc>(context).add(
-                          DismissSummary(),
-                        );
-                      },
-                    )
-                  ],
-                ),
+                  );
+                },
               ),
             TextFormField(
               toolbarOptions: ToolbarOptions(
