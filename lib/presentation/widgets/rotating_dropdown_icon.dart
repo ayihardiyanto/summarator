@@ -32,6 +32,13 @@ class _RotatingDropdownIconState extends State<RotatingDropdownIcon>
     return Container(
       child: AnimatedBuilder(
         animation: animationController,
+        builder: (BuildContext? context, Widget? _widget) {
+          return Transform.rotate(
+            angle:
+                Tween(begin: 0.0, end: pi).animate(animationController).value,
+            child: _widget,
+          );
+        },
         child: GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
@@ -61,13 +68,6 @@ class _RotatingDropdownIconState extends State<RotatingDropdownIcon>
             ],
           )),
         ),
-        builder: (BuildContext? context, Widget? _widget) {
-          return Transform.rotate(
-            angle:
-                Tween(begin: 0.0, end: pi).animate(animationController).value,
-            child: _widget,
-          );
-        },
       ),
     );
   }

@@ -15,5 +15,4 @@ class GetSummarization extends SummarizeEvent {
 }
 
 class DismissSummary extends SummarizeEvent {}
-class AttachListener extends SummarizeEvent {}
 

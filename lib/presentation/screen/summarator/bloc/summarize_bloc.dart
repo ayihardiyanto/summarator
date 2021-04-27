@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:summarator/domain/entities/summary_entity.dart';
 import 'package:summarator/domain/usecases/summary_usecase.dart';
 
 part 'summarize_event.dart';
@@ -26,11 +27,6 @@ class SummarizeBloc extends Bloc<SummarizeEvent, SummarizeState> {
     }
     if (event is DismissSummary) {
       yield SummaryDismissed();
-    }
-
-    if (event is AttachListener) {
-      yield Listening();
-      yield Listened();
     }
   }
 }

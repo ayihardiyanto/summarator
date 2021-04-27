@@ -6,7 +6,7 @@ abstract class SummarizeState extends Equatable {
 }
 
 class Summarized extends SummarizeState {
-  final String? result;
+  final Summary? result;
 
   Summarized({this.result});
 }
@@ -17,6 +17,3 @@ class SummarizingError extends SummarizeState {}
 
 class SummarizingInitial extends SummarizeState {}
 class SummaryDismissed extends SummarizeState {}
-
-class Listening extends SummarizeState{}
-class Listened extends SummarizeState{}

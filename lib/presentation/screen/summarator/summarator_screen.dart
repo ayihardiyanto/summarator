@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:summarator/common/utils/logger.dart';
 import 'package:summarator/common/utils/screen_config.dart';
+import 'package:summarator/presentation/screen/summarator/bloc/activity_bloc.dart';
 import 'package:summarator/presentation/screen/summarator/bloc/summarize_bloc.dart';
 import 'package:summarator/presentation/screen/summarator/summarator_string.dart';
 import 'package:summarator/presentation/screen/summarator/widgets/input_card.dart';
@@ -18,16 +21,32 @@ class _SummaratorScreenState extends State<SummaratorScreen> {
   late TextEditingController inputController;
   late FocusNode inputFocus;
   late SummarizeBloc summarizeBloc;
+  late ActivityBloc activityBloc;
+  late ScrollController scrollController;
+  bool forward = true;
   // bool summarized = false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    activityBloc = BlocProvider.of<ActivityBloc>(context);
     summarizeBloc = BlocProvider.of<SummarizeBloc>(context);
+    activityBloc.addSubscription(summarizeBloc);
     inputFocus = FocusNode();
     inputController = TextEditingController();
     inputController.addListener(() {
-      summarizeBloc.add(AttachListener());
+      activityBloc.add(AttachListener());
+    });
+    scrollController = ScrollController();
+    scrollController.addListener(() {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+          forward = false;
+      }
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+          forward = true;
+      }
     });
   }
 
@@ -55,6 +74,8 @@ class _SummaratorScreenState extends State<SummaratorScreen> {
             width: mqWidth(context),
             // padding: EdgeInsets.only(bottom: hdp(90)),
             child: SingleChildScrollView(
+              controller: scrollController,
+              physics: BouncingScrollPhysics(),
               child: Container(
                 child: Column(
                   children: [
@@ -79,9 +100,10 @@ class _SummaratorScreenState extends State<SummaratorScreen> {
               ),
             ),
           ),
-          BlocBuilder<SummarizeBloc, SummarizeState>(
+          BlocBuilder<ActivityBloc, ActivityState>(
             builder: (context, state) {
-              if (inputController.text.isNotEmpty && state is !Summarized) {
+              if (inputController.text.isNotEmpty &&
+                  state is! Paused) {
                 return Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
@@ -90,12 +112,11 @@ class _SummaratorScreenState extends State<SummaratorScreen> {
                     child: CustomFlatButton(
                       buttonTitle: SummaratorString.getSummary,
                       onPressed: () {
-                        setState(() {
-                          // summarized = true;
-                          inputFocus.unfocus();
-                          summarizeBloc.add(
-                              GetSummarization(text: inputController.text));
-                        });
+                        // summarized = true;
+                        summarizeBloc.add(
+                          GetSummarization(text: inputController.text),
+                        );
+                        inputFocus.unfocus();
                       },
                     ),
                   ),
