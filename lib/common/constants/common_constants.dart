@@ -1,6 +1,7 @@
 class CommonConstants {
   static const sournal = 'Sournal';
   static const emptyString = '';
+  static const space = ' ';
 
   static const googleIcon = 'assets/images/google_image.png';
 
