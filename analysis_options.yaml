@@ -182,7 +182,7 @@ linter:
     slash_for_doc_comments : true
     # - sort_child_properties_last # not yet tested
     # - sort_constructors_first #does not reflect common usage.
-    sort_pub_dependencies : true
+    sort_pub_dependencies : false
     # pedantic - sort_unnamed_constructors_first #is too strict, people are free to choose the best constructor ordering.
     # pedantic - test_types_in_equals # does not offer enough value: there are plenty of other mistakes possible in operator == implementations. It's better to use codegen.
     # pedantic - throw_in_finally
