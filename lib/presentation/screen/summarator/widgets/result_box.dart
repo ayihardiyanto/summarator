@@ -7,10 +7,16 @@ import 'package:summarator/presentation/screen/summarator/summarator_string.dart
 import 'package:summarator/presentation/theme/color_theme.dart';
 import 'package:summarator/presentation/theme/text_styles.dart';
 
-class ResultBox extends StatelessWidget {
+class ResultBox extends StatefulWidget {
   final Summary result;
 
   const ResultBox({Key? key, required this.result}) : super(key: key);
+
+  @override
+  _ResultBoxState createState() => _ResultBoxState();
+}
+
+class _ResultBoxState extends State<ResultBox> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,16 +43,17 @@ class ResultBox extends StatelessWidget {
                   builder: (context, state) => IconButton(
                     padding: EdgeInsets.zero,
                     icon: Icon(
-                      state is FavoriteUpdated && state.favorite
+                      state is FavoriteResultBoxUpdated && state.favorite
                           ? Icons.star
                           : Icons.star_border,
                       color: White.justWhite,
                     ),
                     onPressed: () {
                       final bloc = BlocProvider.of<ActivityBloc>(context);
-                      if (state is FavoriteUpdated && state.favorite) {
-                        bloc.add(RemoveFavorite(summary: result));
-                      }
+                      if (state is FavoriteResultBoxUpdated && state.favorite) {
+                        bloc.add(ResultBoxRemoveFavorite(summary: widget.result));
+                      }else{
+                        bloc.add(ResultBoxAddToFavorite(summary: widget.result));}
                     },
                   ),
                 )
@@ -54,7 +61,7 @@ class ResultBox extends StatelessWidget {
             ),
           ),
           Text(
-            result.summarizedText!,
+            widget.result.summarizedText!,
             style: TextStyles.ttCommons.copyWith(
               color: White.justWhite,
               fontSize: 18,

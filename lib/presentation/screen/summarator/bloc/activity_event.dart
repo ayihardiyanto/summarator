@@ -33,3 +33,21 @@ class RemoveFavorite extends ActivityEvent {
   // TODO: implement props
   List<Object?> get props => [summary];
 }
+
+class ResultBoxAddToFavorite extends ActivityEvent {
+  final Summary summary;
+
+  ResultBoxAddToFavorite({required this.summary});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [summary];
+}
+
+class ResultBoxRemoveFavorite extends ActivityEvent {
+  final Summary summary;
+
+  ResultBoxRemoveFavorite({required this.summary});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [summary];
+}

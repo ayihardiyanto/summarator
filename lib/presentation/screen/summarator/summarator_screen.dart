@@ -55,6 +55,7 @@ class _SummaratorScreenState extends State<SummaratorScreen>
             .animate(_animationController);
     _activityBloc.addSubscription(_summarizeBloc);
     _historyBloc = BlocProvider.of<HistoryBloc>(context);
+    _historyBloc.addSubscription(_activityBloc);
     _inputFocus = FocusNode();
     _inputController = TextEditingController();
     _inputController.addListener(() {
@@ -96,7 +97,9 @@ class _SummaratorScreenState extends State<SummaratorScreen>
         ),
         elevation: 0,
       ),
-      drawer: AppDrawer(appInfo: _packageInformation,),
+      drawer: AppDrawer(
+        appInfo: _packageInformation,
+      ),
       body: Stack(
         children: [
           Container(
@@ -157,8 +160,7 @@ class _SummaratorScreenState extends State<SummaratorScreen>
 
                           BlocBuilder<ActivityBloc, ActivityState>(
                               builder: (context, state) {
-                            if (state is Listened) {
-                              if (state.text.isEmpty) {
+                            if (state is TextEmpty || _inputController.text.isEmpty) {
                                 return BlocBuilder<HistoryBloc, HistoryState>(
                                   builder: (context, state) {
                                     if (state is HistoryLoaded) {
@@ -169,22 +171,26 @@ class _SummaratorScreenState extends State<SummaratorScreen>
                                     return HistoryList();
                                   },
                                 );
-                              }
-                              return Container();
                             }
+
+                            if (state is FavoriteUpdated) {
+                              return BlocBuilder<HistoryBloc, HistoryState>(
+                                builder: (context, state) {
+                                  if (state is HistoryLoaded) {
+                                    return HistoryList(
+                                      summaryHistories: state.summaries,
+                                    );
+                                  }
+                                  return HistoryList();
+                                },
+                              );
+                            }
+
                             if (state is Paused) {
                               return Container();
                             }
-                            return BlocBuilder<HistoryBloc, HistoryState>(
-                              builder: (context, state) {
-                                if (state is HistoryLoaded) {
-                                  return HistoryList(
-                                    summaryHistories: state.summaries,
-                                  );
-                                }
-                                return HistoryList();
-                              },
-                            );
+
+                            return Container();
                           }),
                           SizedBox(
                             height: hdp(80),

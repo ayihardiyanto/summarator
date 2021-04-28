@@ -1,11 +1,13 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:summarator/common/usecase/usecase.dart';
 import 'package:summarator/common/utils/logger.dart';
 import 'package:summarator/domain/entities/summary_entity.dart';
 import 'package:summarator/domain/usecases/summary_usecase.dart';
+import 'package:summarator/presentation/screen/summarator/bloc/activity_bloc.dart';
 
 part 'history_event.dart';
 part 'history_state.dart';
@@ -14,10 +16,19 @@ part 'history_state.dart';
 class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
   final GetHistoryUsecase getHistoryUsecase;
   final ClearHistoryUsecase clearHistoryUsecase;
+  late StreamSubscription activityStream;
   HistoryBloc({
     required this.getHistoryUsecase,
     required this.clearHistoryUsecase,
   }) : super(HistoryInitial());
+
+  void addSubscription(ActivityBloc activityBloc) {
+    activityStream = activityBloc.stream.listen((state) {
+      if (state is FavoriteUpdated) {
+        add(GetHistory());
+      }
+    });
+  }
 
   @override
   Stream<HistoryState> mapEventToState(HistoryEvent event) async* {

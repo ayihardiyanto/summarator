@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:summarator/common/injections/injector.dart';
 import 'package:summarator/common/utils/screen_config.dart';
 import 'package:summarator/domain/entities/summary_entity.dart';
+import 'package:summarator/presentation/screen/summarator/bloc/activity_bloc.dart';
+import 'package:summarator/presentation/screen/summarator/bloc/history_bloc.dart';
 import 'package:summarator/presentation/theme/color_theme.dart';
 import 'package:summarator/presentation/theme/text_styles.dart';
 
@@ -50,14 +54,20 @@ class HistoryList extends StatelessWidget {
               IconButton(
                 padding: EdgeInsets.zero,
                 icon: Icon(
-                  Icons.star_border,
+                  summaryHistories[index].favorite
+                      ? Icons.star
+                      : Icons.star_border,
                   color: Grey.darkGrey,
                 ),
                 onPressed: () {
-                  // final bloc = BlocProvider.of<ActivityBloc>(context);
-                  // if (state is FavoriteUpdated && state.favorite) {
-                  //   bloc.add(RemoveFavorite(summary: result));
-                  // }
+                  final activityBloc = BlocProvider.of<ActivityBloc>(context);
+                  if (summaryHistories[index].favorite) {
+                    activityBloc
+                        .add(RemoveFavorite(summary: summaryHistories[index]));
+                  } else {
+                    activityBloc
+                        .add(AddToFavorite(summary: summaryHistories[index]));
+                  }
                 },
               ),
             ],

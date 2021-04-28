@@ -11,12 +11,22 @@ class GetSummaryButton extends StatelessWidget {
   final Animation<Offset> animateButton;
   final GestureTapCallback? onPressed;
 
-  const GetSummaryButton({Key? key, this.visible = false, required this.animateButton, this.onPressed}) : super(key: key);
+  const GetSummaryButton(
+      {Key? key,
+      this.visible = false,
+      required this.animateButton,
+      this.onPressed})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
-        if (visible && state is! Paused) {
+        if (state is Paused ||
+            state is FavoriteResultBoxUpdated ||
+            state is UpdatingFavorite) {
+          return Container();
+        }
+        if (state is TextFilled) {
           return SlideTransition(
             position: animateButton,
             child: Align(

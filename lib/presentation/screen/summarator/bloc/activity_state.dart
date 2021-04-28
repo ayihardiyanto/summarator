@@ -9,14 +9,9 @@ class ActivityInitial extends ActivityState {}
 
 class Listening extends ActivityState {}
 
-class Listened extends ActivityState {
-  final String text;
+class TextFilled extends ActivityState {}
 
-  Listened({this.text = CommonConstants.emptyString});
-  @override
-  // TODO: implement props
-  List<Object?> get props => [text];
-}
+class TextEmpty extends ActivityState {}
 
 class Paused extends ActivityState {}
 
@@ -26,4 +21,10 @@ class FavoriteUpdated extends ActivityState {
   final bool favorite;
 
   FavoriteUpdated({this.favorite = false});
+}
+
+class FavoriteResultBoxUpdated extends ActivityState {
+  final bool favorite;
+
+  FavoriteResultBoxUpdated({this.favorite = false});
 }

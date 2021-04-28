@@ -34,7 +34,11 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
   Stream<ActivityState> mapEventToState(ActivityEvent event) async* {
     if (event is AttachListener) {
       yield Listening();
-      yield Listened(text: event.text);
+      if (event.text.isEmpty) {
+        yield TextEmpty();
+      } else {
+        yield TextFilled();
+      }
     }
 
     if (event is PauseUponSummarizing) {
@@ -43,14 +47,26 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
 
     if (event is AddToFavorite) {
       yield UpdatingFavorite();
-      unawaited(addToFavoriteUsecase.call(event.summary));
+      await addToFavoriteUsecase.call(event.summary);
       yield FavoriteUpdated(favorite: true);
     }
 
     if (event is RemoveFavorite) {
       yield UpdatingFavorite();
-      unawaited(unfavoriteUsecase.call(event.summary));
+      await unfavoriteUsecase.call(event.summary);
       yield FavoriteUpdated(favorite: false);
+    }
+
+    if (event is ResultBoxAddToFavorite) {
+      yield UpdatingFavorite();
+      await addToFavoriteUsecase.call(event.summary);
+      yield FavoriteResultBoxUpdated(favorite: true);
+    }
+
+    if (event is ResultBoxRemoveFavorite) {
+      yield UpdatingFavorite();
+      await unfavoriteUsecase.call(event.summary);
+      yield FavoriteResultBoxUpdated(favorite: false);
     }
   }
 

@@ -2,6 +2,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:summarator/common/constants/common_constants.dart';
 import 'package:summarator/common/constants/summary_constants.dart';
 import 'package:summarator/common/errors/bad_request.dart';
@@ -68,15 +69,18 @@ class SummaryRepository implements ISummaryRepository {
       {required Summary summary}) async {
     // TODO: implement addToFavorite
     try {
+      final wordArray = summary.originalText!.split(CommonConstants.space);
+      final keyword = wordArray[0] + wordArray[wordArray.length - 1];
       final SummaryModel favorited = SummaryModel(
-        favorite: summary.favorite,
+        favorite: true,
         originalText: summary.originalText,
         summarizedText: summary.summarizedText,
       );
       await localDatasource.insertOrUpdateItem(
         favorited,
-        SummaryConstants.favorite + favorited.originalText!,
+        SummaryConstants.favorite + keyword,
       );
+      await localDatasource.delete(keyword);
       return Right(true);
     } catch (e) {
       return Left(BadRequest());
@@ -91,10 +95,10 @@ class SummaryRepository implements ISummaryRepository {
       if (localData.isEmpty) {
         return Right(false);
       }
+      // await localDatasource.deleteAll();
       for (SummaryModel data in localData) {
-
-    final wordArray = data.originalText!.split(CommonConstants.space);
-    final keyword = wordArray[0] + wordArray[wordArray.length - 1];
+        final wordArray = data.originalText!.split(CommonConstants.space);
+        final keyword = wordArray[0] + wordArray[wordArray.length - 1];
         await localDatasource.delete(
           keyword,
         );
@@ -108,9 +112,18 @@ class SummaryRepository implements ISummaryRepository {
   @override
   Future<Either<Failure, bool>> unfavorite({required Summary summary}) async {
     try {
-      await localDatasource.delete(
-        SummaryConstants.favorite + summary.originalText!,
+      final wordArray = summary.originalText!.split(CommonConstants.space);
+      final keyword = wordArray[0] + wordArray[wordArray.length - 1];
+      final SummaryModel favorited = SummaryModel(
+        favorite: false,
+        originalText: summary.originalText,
+        summarizedText: summary.summarizedText,
       );
+      await localDatasource.insertOrUpdateItem(
+        favorited,
+        keyword,
+      );
+      await localDatasource.delete(SummaryConstants.favorite + keyword);
       return Right(true);
     } catch (e) {
       return Left(BadRequest());

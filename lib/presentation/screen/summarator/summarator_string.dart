@@ -1,5 +1,3 @@
-import 'package:summarator/common/constants/common_constants.dart';
-
 class SummaratorString {
   static const String appBarTitle = 'Summarator';
   static const String hintText = 'Tap to enter text';
