@@ -28,14 +28,15 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
         Log.e('GetHistory Error: $l');
         yield HistoryError();
       }, (r) async* {
-        yield HistoryLoaded(summary: r);
+        yield HistoryLoaded(summaries: r);
       });
     }
 
     if (event is ClearHistory) {
       yield HistoryLoading();
-      unawaited(clearHistoryUsecase.call(NoParams()));
-      yield HistoryLoaded();
+      await clearHistoryUsecase.call(NoParams());
+      add(GetHistory());
+      yield HistoryCleared();
     }
   }
 }

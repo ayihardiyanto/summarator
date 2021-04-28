@@ -92,8 +92,11 @@ class SummaryRepository implements ISummaryRepository {
         return Right(false);
       }
       for (SummaryModel data in localData) {
+
+    final wordArray = data.originalText!.split(CommonConstants.space);
+    final keyword = wordArray[0] + wordArray[wordArray.length - 1];
         await localDatasource.delete(
-          data.originalText!,
+          keyword,
         );
       }
       return Right(true);

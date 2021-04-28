@@ -9,7 +9,14 @@ class ActivityInitial extends ActivityState {}
 
 class Listening extends ActivityState {}
 
-class Listened extends ActivityState {}
+class Listened extends ActivityState {
+  final String text;
+
+  Listened({this.text = CommonConstants.emptyString});
+  @override
+  // TODO: implement props
+  List<Object?> get props => [text];
+}
 
 class Paused extends ActivityState {}
 

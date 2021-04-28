@@ -13,10 +13,12 @@ class HistoryLoading extends HistoryState {}
 class HistoryError extends HistoryState {}
 
 class HistoryLoaded extends HistoryState {
-  final List<Summary> summary;
+  final List<Summary> summaries;
 
-  HistoryLoaded({this.summary = const []});
+  HistoryLoaded({this.summaries = const []});
   @override
   // TODO: implement props
-  List<Object?> get props => [summary];
+  List<Object?> get props => [summaries];
 }
+
+class HistoryCleared extends HistoryState{}

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:summarator/common/utils/screen_config.dart';
+import 'package:summarator/presentation/screen/summarator/bloc/history_bloc.dart';
 import 'package:summarator/presentation/screen/summarator/bloc/summarize_bloc.dart';
 import 'package:summarator/presentation/theme/color_theme.dart';
 import 'package:summarator/presentation/theme/text_styles.dart';
@@ -50,6 +51,9 @@ class InputCard extends StatelessWidget {
                             inputController.clear();
                             BlocProvider.of<SummarizeBloc>(context).add(
                               DismissSummary(),
+                            );
+                            BlocProvider.of<HistoryBloc>(context).add(
+                              GetHistory(),
                             );
                           },
                         )
