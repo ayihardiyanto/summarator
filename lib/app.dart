@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:summarator/common/utils/logger.dart';
 import 'package:summarator/presentation/screen/summarator/bloc/activity_bloc.dart';
 import 'package:summarator/presentation/screen/summarator/bloc/history_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:summarator/presentation/screen/summarator/summarator_screen.dart
 import 'package:summarator/presentation/theme/theme_data.dart';
 
 import 'common/injections/injector.dart';
+import 'common/utils/app_information.dart';
 import 'common/utils/database_utils.dart';
 import 'common/utils/screen_config.dart';
 
@@ -32,13 +34,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late AppInformation appInfo;
   @override
   void initState() {
+    appInfo = getIt<AppInformation>();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
+    unawaited(appInfo.getAppInfo());
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.transparent),
     );

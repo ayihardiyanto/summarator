@@ -8,4 +8,9 @@ class CommonConstants {
   static const environment = 'environment';
   static const production = 'PRODUCTION';
   static const develompent = 'DEVELOPMENT';
+
+    static const String appName = 'app_name';
+  static const String packageName = 'package_name';
+  static const String version = 'version';
+  static const String buildNumber = 'build_number';
 }
