@@ -2,7 +2,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:summarator/common/constants/common_constants.dart';
 import 'package:summarator/common/constants/summary_constants.dart';
 import 'package:summarator/common/errors/bad_request.dart';

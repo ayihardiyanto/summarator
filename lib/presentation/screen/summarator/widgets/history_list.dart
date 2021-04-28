@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:summarator/common/injections/injector.dart';
 import 'package:summarator/common/utils/screen_config.dart';
 import 'package:summarator/domain/entities/summary_entity.dart';
 import 'package:summarator/presentation/screen/summarator/bloc/activity_bloc.dart';
-import 'package:summarator/presentation/screen/summarator/bloc/history_bloc.dart';
 import 'package:summarator/presentation/theme/color_theme.dart';
 import 'package:summarator/presentation/theme/text_styles.dart';
 
