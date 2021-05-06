@@ -9,11 +9,16 @@ class ActivityInitial extends ActivityState {}
 
 class Listening extends ActivityState {}
 
-class TextFilled extends ActivityState {}
+class TextFilled extends ActivityState {
+  final bool isSummarized;
+
+  TextFilled({this.isSummarized = false});
+  
+}
 
 class TextEmpty extends ActivityState {}
 
-class Paused extends ActivityState {}
+class ButtonHidden extends ActivityState {}
 
 class UpdatingFavorite extends ActivityState {}
 

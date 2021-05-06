@@ -7,14 +7,13 @@ abstract class ActivityEvent extends Equatable {
 
 class AttachListener extends ActivityEvent {
   final String text;
+  final bool isSummarized;
 
-  AttachListener({this.text = CommonConstants.emptyString});
+  AttachListener({this.text = CommonConstants.emptyString, this.isSummarized = false});
   @override
   // TODO: implement props
   List<Object?> get props => [text];
 }
-
-class PauseUponSummarizing extends ActivityEvent {}
 
 class AddToFavorite extends ActivityEvent {
   final Summary summary;

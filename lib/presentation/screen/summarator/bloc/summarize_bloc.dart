@@ -22,8 +22,12 @@ class SummarizeBloc extends Bloc<SummarizeEvent, SummarizeState> {
       yield* result.fold((l) async* {
         yield SummarizingError();
       }, (r) async* {
-        yield Summarized(result: r);
+        yield Summarized(result: r, summaryShown: true);
       });
+    }
+    if (event is GetSummarizationFromHistory) {
+      yield Summarizing();
+      yield Summarized(result: event.summary, summaryShown: true);
     }
     if (event is DismissSummary) {
       yield SummaryDismissed();

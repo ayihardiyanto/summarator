@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:summarator/common/constants/common_constants.dart';
+import 'package:summarator/common/constants/summary_constants.dart';
 import 'package:summarator/domain/entities/summary_entity.dart';
 import 'package:summarator/domain/usecases/summary_usecase.dart';
 import 'package:summarator/presentation/screen/summarator/bloc/summarize_bloc.dart';
@@ -17,6 +18,7 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
   late StreamSubscription summarizeSubscription;
   final AddToFavoriteUsecase addToFavoriteUsecase;
   final UnfavoriteUsecase unfavoriteUsecase;
+  bool isSummarized = false;
   ActivityBloc(
       {required this.addToFavoriteUsecase, required this.unfavoriteUsecase})
       : super(ActivityInitial());
@@ -24,9 +26,19 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
   void addSubscription(SummarizeBloc summarizeBloc) {
     summarizeSubscription = summarizeBloc.stream.listen((state) {
       if (state is Summarized) {
-        add(PauseUponSummarizing());
+        notifyListener(true);
+      }
+      if (state is SummaryDismissed) {
+        notifyListener(false);
       }
     });
+  }
+
+  void notifyListener(summarized) {
+    isSummarized = summarized;
+    String text =
+        isSummarized ? SummaryConstants.text : CommonConstants.emptyString;
+    add(AttachListener(isSummarized: isSummarized, text: text));
   }
 
   @override
@@ -36,12 +48,8 @@ class ActivityBloc extends Bloc<ActivityEvent, ActivityState> {
       if (event.text.isEmpty) {
         yield TextEmpty();
       } else {
-        yield TextFilled();
+        yield TextFilled(isSummarized: isSummarized);
       }
-    }
-
-    if (event is PauseUponSummarizing) {
-      yield Paused();
     }
 
     if (event is AddToFavorite) {

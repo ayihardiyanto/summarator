@@ -7,8 +7,9 @@ abstract class SummarizeState extends Equatable {
 
 class Summarized extends SummarizeState {
   final Summary? result;
+  final bool summaryShown;
 
-  Summarized({this.result});
+  Summarized({this.result, this.summaryShown = false, });
 }
 
 class Summarizing extends SummarizeState {}
@@ -16,4 +17,5 @@ class Summarizing extends SummarizeState {}
 class SummarizingError extends SummarizeState {}
 
 class SummarizingInitial extends SummarizeState {}
+
 class SummaryDismissed extends SummarizeState {}

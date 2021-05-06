@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:summarator/common/constants/shared_preferences_constants.dart';
+import 'package:summarator/common/constants/summary_constants.dart';
 import 'package:summarator/common/injections/injector.dart';
 import 'package:summarator/common/utils/local_storage.dart';
 import 'package:summarator/common/utils/screen_config.dart';
@@ -41,7 +42,6 @@ class _SummaratorScreenState extends State<SummaratorScreen>
   late LocalStorage _localStorage;
   late PackageInformation _packageInformation;
   ScrollDirection? _scrollDirection;
-  // bool summarized = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -141,36 +141,56 @@ class _SummaratorScreenState extends State<SummaratorScreen>
                     Container(
                       child: Column(
                         children: [
-                          InputCard(
-                            inputController: _inputController,
-                            focusNode: _inputFocus,
+                          BlocBuilder<SummarizeBloc, SummarizeState>(
+                            builder: (context, state) {
+                              bool enableEditing = true;
+                              if (state is Summarized) {
+                                _scrollController.animateTo(
+                                  0.0,
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.bounceIn,
+                                );
+                                _inputController.text =
+                                    state.result!.originalText!;
+                                enableEditing = false;
+                              }
+                              return InputCard(
+                                inputController: _inputController,
+                                focusNode: _inputFocus,
+                                enabled: enableEditing,
+                              );
+                            },
                           ),
-                          // if (summarized)
+                          // Will show result upon summarized
                           BlocBuilder<SummarizeBloc, SummarizeState>(
                             builder: (context, state) {
                               if (state is Summarized) {
-                                _scrollController.animateTo(0.0,
-                                    duration: Duration(milliseconds: 300),
-                                    curve: Curves.bounceIn);
+                                _scrollController.animateTo(
+                                  0.0,
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.bounceIn,
+                                );
                                 return ResultBox(result: state.result!);
                               }
                               return Container();
                             },
                           ),
 
+                          // Will show history when idle
                           BlocBuilder<ActivityBloc, ActivityState>(
                               builder: (context, state) {
-                            if (state is TextEmpty || _inputController.text.isEmpty) {
-                                return BlocBuilder<HistoryBloc, HistoryState>(
-                                  builder: (context, state) {
-                                    if (state is HistoryLoaded) {
-                                      return HistoryList(
-                                        summaryHistories: state.summaries,
-                                      );
-                                    }
-                                    return HistoryList();
-                                  },
-                                );
+                            if (state is TextEmpty ||
+                                _inputController.text.isEmpty) {
+                              return BlocBuilder<HistoryBloc, HistoryState>(
+                                builder: (context, state) {
+                                  if (state is HistoryLoaded) {
+                                    return HistoryList(
+                                      summaryHistories: state.summaries.where((element) => element.key!.contains(SummaryConstants.history)).toList(),
+                                    );
+                                  }
+                                  return HistoryList();
+                                },
+                              );
                             }
 
                             if (state is FavoriteUpdated) {
@@ -185,11 +205,6 @@ class _SummaratorScreenState extends State<SummaratorScreen>
                                 },
                               );
                             }
-
-                            if (state is Paused) {
-                              return Container();
-                            }
-
                             return Container();
                           }),
                           SizedBox(
@@ -204,7 +219,6 @@ class _SummaratorScreenState extends State<SummaratorScreen>
             ),
           ),
           GetSummaryButton(
-            visible: _inputController.text.isNotEmpty,
             animateButton: _floatInButtonAnimation,
             onPressed: () {
               _summarizeBloc.add(

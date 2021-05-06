@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:summarator/common/utils/screen_config.dart';
 import 'package:summarator/domain/entities/summary_entity.dart';
 import 'package:summarator/presentation/screen/summarator/bloc/activity_bloc.dart';
+import 'package:summarator/presentation/screen/summarator/bloc/summarize_bloc.dart';
 import 'package:summarator/presentation/theme/color_theme.dart';
 import 'package:summarator/presentation/theme/text_styles.dart';
 
@@ -22,53 +23,60 @@ class HistoryList extends StatelessWidget {
         padding: EdgeInsets.zero,
         shrinkWrap: true,
         itemCount: summaryHistories.length,
-        itemBuilder: (context, index) => Container(
-          width: mqWidth(context),
-          padding: EdgeInsets.all(hdp(10)),
-          height: hdp(60),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      summaryHistories[index].originalText!,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: TextStyles.ttCommons,
-                    ),
-                    Text(
-                      summaryHistories[index].summarizedText!,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: TextStyles.ttCommons.copyWith(fontSize: 14),
-                    )
-                  ],
+        itemBuilder: (context, index) => InkWell(
+          onTap: () {
+            BlocProvider.of<SummarizeBloc>(context).add(
+              GetSummarizationFromHistory(summary: summaryHistories[index]),
+            );
+          },
+          child: Container(
+            width: mqWidth(context),
+            padding: EdgeInsets.all(hdp(10)),
+            height: hdp(60),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        summaryHistories[index].originalText!,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyles.ttCommons,
+                      ),
+                      Text(
+                        summaryHistories[index].summarizedText!,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyles.ttCommons.copyWith(fontSize: 14),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              IconButton(
-                padding: EdgeInsets.zero,
-                icon: Icon(
-                  summaryHistories[index].favorite
-                      ? Icons.star
-                      : Icons.star_border,
-                  color: Grey.darkGrey,
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  icon: Icon(
+                    summaryHistories[index].favorite
+                        ? Icons.star
+                        : Icons.star_border,
+                    color: Grey.darkGrey,
+                  ),
+                  onPressed: () {
+                    final activityBloc = BlocProvider.of<ActivityBloc>(context);
+                    if (summaryHistories[index].favorite) {
+                      activityBloc.add(
+                          RemoveFavorite(summary: summaryHistories[index]));
+                    } else {
+                      activityBloc
+                          .add(AddToFavorite(summary: summaryHistories[index]));
+                    }
+                  },
                 ),
-                onPressed: () {
-                  final activityBloc = BlocProvider.of<ActivityBloc>(context);
-                  if (summaryHistories[index].favorite) {
-                    activityBloc
-                        .add(RemoveFavorite(summary: summaryHistories[index]));
-                  } else {
-                    activityBloc
-                        .add(AddToFavorite(summary: summaryHistories[index]));
-                  }
-                },
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

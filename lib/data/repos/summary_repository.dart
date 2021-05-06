@@ -32,7 +32,9 @@ class SummaryRepository implements ISummaryRepository {
     required GetSummaryPayload payload,
   }) async {
     final wordArray = payload.text.split(CommonConstants.space);
-    final keyword = wordArray[0] + wordArray[wordArray.length - 1];
+    final keyword = SummaryConstants.history +
+        wordArray[0] +
+        wordArray[wordArray.length - 1];
     try {
       final SummaryModel? localData =
           await localDatasource.getFormattedItem(keyword);
@@ -44,6 +46,7 @@ class SummaryRepository implements ISummaryRepository {
         final result =
             await dio.post('http://192.168.43.221:8080', data: param);
         final returnValue = SummaryModel(
+          key: keyword,
           favorite: false,
           originalText: payload.text,
           summarizedText: result.data[SummaryConstants.result],
@@ -68,16 +71,17 @@ class SummaryRepository implements ISummaryRepository {
       {required Summary summary}) async {
     // TODO: implement addToFavorite
     try {
-      final wordArray = summary.originalText!.split(CommonConstants.space);
-      final keyword = wordArray[0] + wordArray[wordArray.length - 1];
+      final keyword = summary.key!;
+      final newKeyword = SummaryConstants.favorite + keyword;
       final SummaryModel favorited = SummaryModel(
+        key: newKeyword,
         favorite: true,
         originalText: summary.originalText,
         summarizedText: summary.summarizedText,
       );
       await localDatasource.insertOrUpdateItem(
         favorited,
-        SummaryConstants.favorite + keyword,
+        newKeyword,
       );
       await localDatasource.delete(keyword);
       return Right(true);
@@ -96,11 +100,11 @@ class SummaryRepository implements ISummaryRepository {
       }
       // await localDatasource.deleteAll();
       for (SummaryModel data in localData) {
-        final wordArray = data.originalText!.split(CommonConstants.space);
-        final keyword = wordArray[0] + wordArray[wordArray.length - 1];
-        await localDatasource.delete(
-          keyword,
-        );
+        if (data.key!.contains(SummaryConstants.history)) {
+          await localDatasource.delete(
+            data.key!,
+          );
+        }
       }
       return Right(true);
     } catch (e) {
@@ -111,18 +115,19 @@ class SummaryRepository implements ISummaryRepository {
   @override
   Future<Either<Failure, bool>> unfavorite({required Summary summary}) async {
     try {
-      final wordArray = summary.originalText!.split(CommonConstants.space);
-      final keyword = wordArray[0] + wordArray[wordArray.length - 1];
+      final keyword = summary.key!;
+      final newKeyword = keyword.split(SummaryConstants.favorite)[1];
       final SummaryModel favorited = SummaryModel(
+        key: newKeyword,
         favorite: false,
         originalText: summary.originalText,
         summarizedText: summary.summarizedText,
       );
       await localDatasource.insertOrUpdateItem(
         favorited,
-        keyword,
+        newKeyword,
       );
-      await localDatasource.delete(SummaryConstants.favorite + keyword);
+      await localDatasource.delete(keyword);
       return Right(true);
     } catch (e) {
       return Left(BadRequest());

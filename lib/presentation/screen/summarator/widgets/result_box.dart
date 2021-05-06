@@ -10,13 +10,30 @@ import 'package:summarator/presentation/theme/text_styles.dart';
 class ResultBox extends StatefulWidget {
   final Summary result;
 
-  const ResultBox({Key? key, required this.result}) : super(key: key);
+  const ResultBox(
+      {Key? key, required this.result})
+      : super(key: key);
 
   @override
   _ResultBoxState createState() => _ResultBoxState();
 }
 
 class _ResultBoxState extends State<ResultBox> {
+  late bool favorite;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    favorite = widget.result.favorite;
+  }
+
+  @override
+  void didUpdateWidget(covariant ResultBox oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    favorite = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,15 +62,22 @@ class _ResultBoxState extends State<ResultBox> {
                     icon: Icon(
                       state is FavoriteResultBoxUpdated && state.favorite
                           ? Icons.star
-                          : Icons.star_border,
+                          : favorite
+                              ? Icons.star
+                              : Icons.star_border,
                       color: White.justWhite,
                     ),
                     onPressed: () {
                       final bloc = BlocProvider.of<ActivityBloc>(context);
-                      if (state is FavoriteResultBoxUpdated && state.favorite) {
-                        bloc.add(ResultBoxRemoveFavorite(summary: widget.result));
-                      }else{
-                        bloc.add(ResultBoxAddToFavorite(summary: widget.result));}
+                      if (favorite) {
+                        favorite = false;
+                        bloc.add(
+                            ResultBoxRemoveFavorite(summary: widget.result));
+                      } else {
+                        favorite = true;
+                        bloc.add(
+                            ResultBoxAddToFavorite(summary: widget.result));
+                      }
                     },
                   ),
                 )

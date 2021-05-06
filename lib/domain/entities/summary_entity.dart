@@ -8,8 +8,10 @@ class Summary extends Equatable {
   final String? summarizedText;
   @HiveField(2)
   final bool favorite;
+  @HiveField(3)
+  final String? key;
 
-  Summary({this.originalText, this.summarizedText, this.favorite = false});
+  Summary({this.originalText, this.summarizedText, this.favorite = false, this.key});
 
   @override
   // TODO: implement props
@@ -17,5 +19,6 @@ class Summary extends Equatable {
         originalText,
         summarizedText,
         favorite,
+        key,
       ];
 }

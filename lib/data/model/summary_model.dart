@@ -3,10 +3,12 @@ import 'package:summarator/domain/entities/summary_entity.dart';
 
 class SummaryModel extends Summary {
   SummaryModel({
+    String? key,
     String? originalText,
     String? summarizedText,
     bool favorite = false,
   }) : super(
+          key: key,
           originalText: originalText,
           summarizedText: summarizedText,
           favorite: favorite,
@@ -14,6 +16,7 @@ class SummaryModel extends Summary {
 
   factory SummaryModel.fromTable({required SummaryTable table}) {
     return SummaryModel(
+      key: table.key,
       originalText: table.originalText,
       summarizedText: table.summarizedText,
       favorite: table.favorite,

@@ -7,13 +7,11 @@ import 'package:summarator/presentation/widgets/custom_flat_button.dart';
 import '../summarator_string.dart';
 
 class GetSummaryButton extends StatelessWidget {
-  final bool visible;
   final Animation<Offset> animateButton;
   final GestureTapCallback? onPressed;
 
   const GetSummaryButton(
       {Key? key,
-      this.visible = false,
       required this.animateButton,
       this.onPressed})
       : super(key: key);
@@ -21,12 +19,8 @@ class GetSummaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ActivityBloc, ActivityState>(
       builder: (context, state) {
-        if (state is Paused ||
-            state is FavoriteResultBoxUpdated ||
-            state is UpdatingFavorite) {
-          return Container();
-        }
         if (state is TextFilled) {
+          if (state.isSummarized) return Container();
           return SlideTransition(
             position: animateButton,
             child: Align(

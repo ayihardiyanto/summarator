@@ -14,5 +14,13 @@ class GetSummarization extends SummarizeEvent {
   List<Object?> get props => [text];
 }
 
-class DismissSummary extends SummarizeEvent {}
+class GetSummarizationFromHistory extends SummarizeEvent {
+  final Summary summary;
 
+  GetSummarizationFromHistory({required this.summary});
+
+  @override
+  List<Object?> get props => [summary];
+}
+
+class DismissSummary extends SummarizeEvent {}

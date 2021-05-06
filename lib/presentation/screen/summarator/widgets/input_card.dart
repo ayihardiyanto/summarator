@@ -12,8 +12,9 @@ import '../summarator_string.dart';
 class InputCard extends StatelessWidget {
   final TextEditingController inputController;
   final FocusNode? focusNode;
+  final bool enabled;
 
-  const InputCard({Key? key, required this.inputController, this.focusNode})
+  const InputCard({Key? key, required this.inputController, this.focusNode, this.enabled = true})
       : super(key: key);
 
   @override
@@ -70,6 +71,7 @@ class InputCard extends StatelessWidget {
                 selectAll: true,
               ),
               enableInteractiveSelection: true,
+              enabled: enabled,
               controller: inputController,
               focusNode: focusNode,
               style: TextStyles.ttCommons.copyWith(fontSize: 18),
