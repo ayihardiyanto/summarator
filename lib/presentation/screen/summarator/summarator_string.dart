@@ -7,4 +7,6 @@ class SummaratorString {
   static const String clearHistory = 'Clear History';
   static const String favorite = 'Favorite';
   static const String version = 'V';
+  static const String emptyScreen = 'Sorry, no favorites can be shown';
+  static const String oops = 'OOPS!';
 }

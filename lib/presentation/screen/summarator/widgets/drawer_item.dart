@@ -22,7 +22,7 @@ class DrawerItem extends StatelessWidget {
           children: [
             Icon(
               props?.icon ?? Icons.close,
-              color: Grey.brownGrey,
+              color: Theme.of(context).accentColor,
               size: hdp(25),
             ),
             SizedBox(
@@ -31,10 +31,9 @@ class DrawerItem extends StatelessWidget {
             Text(
               props?.text ?? CommonConstants.emptyString,
               style: TextStyles.ttCommons.copyWith(
-                color: Grey.darkGrey,
-                fontSize: 14,
-                fontWeight: FontWeight.w500
-              ),
+                  color: Grey.darkGrey,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500),
             )
           ],
         ),

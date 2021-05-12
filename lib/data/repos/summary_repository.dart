@@ -73,17 +73,7 @@ class SummaryRepository implements ISummaryRepository {
     try {
       final keyword = summary.key!;
       final newKeyword = SummaryConstants.favorite + keyword;
-      final SummaryModel favorited = SummaryModel(
-        key: newKeyword,
-        favorite: true,
-        originalText: summary.originalText,
-        summarizedText: summary.summarizedText,
-      );
-      await localDatasource.insertOrUpdateItem(
-        favorited,
-        newKeyword,
-      );
-      await localDatasource.delete(keyword);
+      await shiftSummaryInStorage(summary, newKeyword, true);
       return Right(true);
     } catch (e) {
       return Left(BadRequest());
@@ -98,12 +88,11 @@ class SummaryRepository implements ISummaryRepository {
       if (localData.isEmpty) {
         return Right(false);
       }
-      // await localDatasource.deleteAll();
+      await localDatasource.deleteAll();
       for (SummaryModel data in localData) {
-        if (data.key!.contains(SummaryConstants.history)) {
-          await localDatasource.delete(
-            data.key!,
-          );
+        if (data.key!.contains(SummaryConstants.favorite)) {
+          String keyword = data.key!.replaceAll(SummaryConstants.history, CommonConstants.emptyString);
+          await shiftSummaryInStorage(data, keyword, true);
         }
       }
       return Right(true);
@@ -117,17 +106,7 @@ class SummaryRepository implements ISummaryRepository {
     try {
       final keyword = summary.key!;
       final newKeyword = keyword.split(SummaryConstants.favorite)[1];
-      final SummaryModel favorited = SummaryModel(
-        key: newKeyword,
-        favorite: false,
-        originalText: summary.originalText,
-        summarizedText: summary.summarizedText,
-      );
-      await localDatasource.insertOrUpdateItem(
-        favorited,
-        newKeyword,
-      );
-      await localDatasource.delete(keyword);
+      await shiftSummaryInStorage(summary, newKeyword, false);
       return Right(true);
     } catch (e) {
       return Left(BadRequest());
@@ -142,5 +121,19 @@ class SummaryRepository implements ISummaryRepository {
     } catch (e) {
       return Left(BadRequest());
     }
+  }
+
+  Future<void> shiftSummaryInStorage(Summary summary, String newKeyword, bool favorite) async {
+    final SummaryModel favorited = SummaryModel(
+      key: newKeyword,
+      favorite: favorite,
+      originalText: summary.originalText,
+      summarizedText: summary.summarizedText,
+    );
+    await localDatasource.insertOrUpdateItem(
+      favorited,
+      newKeyword,
+    );
+    await localDatasource.delete(summary.key!);
   }
 }

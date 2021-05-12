@@ -17,6 +17,7 @@ class SummaryTableAdapter extends TypeAdapter<SummaryTable> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return SummaryTable(
+      key: fields[3] as String?,
       originalText: fields[0] as String?,
       summarizedText: fields[1] as String?,
       favorite: fields[2] as bool,
@@ -26,13 +27,15 @@ class SummaryTableAdapter extends TypeAdapter<SummaryTable> {
   @override
   void write(BinaryWriter writer, SummaryTable obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.originalText)
       ..writeByte(1)
       ..write(obj.summarizedText)
       ..writeByte(2)
-      ..write(obj.favorite);
+      ..write(obj.favorite)
+      ..writeByte(3)
+      ..write(obj.key);
   }
 
   @override
