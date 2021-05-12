@@ -9,7 +9,17 @@ class Summarized extends SummarizeState {
   final Summary? result;
   final bool summaryShown;
 
-  Summarized({this.result, this.summaryShown = false, });
+  Summarized({
+    this.result,
+    this.summaryShown = false,
+  });
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [
+        result,
+        summaryShown,
+      ];
 }
 
 class Summarizing extends SummarizeState {}

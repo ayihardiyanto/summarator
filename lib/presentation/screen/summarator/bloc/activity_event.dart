@@ -1,8 +1,6 @@
 part of 'activity_bloc.dart';
 
 abstract class ActivityEvent extends Equatable {
-  @override
-  List<Object?> get props => [];
 }
 
 class AttachListener extends ActivityEvent {
@@ -11,8 +9,7 @@ class AttachListener extends ActivityEvent {
 
   AttachListener({this.text = CommonConstants.emptyString, this.isSummarized = false});
   @override
-  // TODO: implement props
-  List<Object?> get props => [text];
+  List<Object?> get props => [text, isSummarized];
 }
 
 class AddToFavorite extends ActivityEvent {
@@ -20,7 +17,6 @@ class AddToFavorite extends ActivityEvent {
 
   AddToFavorite({required this.summary});
   @override
-  // TODO: implement props
   List<Object?> get props => [summary];
 }
 

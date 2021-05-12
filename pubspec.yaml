@@ -26,7 +26,7 @@ dependencies:
   cloud_firestore: ^1.0.5
   connectivity: ^3.0.3
   cupertino_icons: ^1.0.2
-  dartz: ^0.9.2
+  dartz: ^0.10.0-nullsafety.2
   dio: ^4.0.0
   equatable: ^2.0.0
   firebase_auth: ^1.1.0
@@ -36,8 +36,10 @@ dependencies:
   flutter_bloc: ^7.0.0
   flutter_native_splash: ^1.1.8+4
   hive: ^2.0.4
+  http_mock_adapter: ^0.2.1
   injectable: ^1.2.2
   logger: ^1.0.0
+  mockito: ^5.0.7
   package_info: ^2.0.0
   path_provider: ^2.0.1
   pedantic: ^1.11.0
@@ -49,11 +51,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  bloc_test: ^8.0.0
   build_runner: null
   change_app_package_name: ^1.0.0
   flutter_launcher_icons: ^0.9.0
   hive_generator: ^1.1.0
   injectable_generator: ^1.2.2
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

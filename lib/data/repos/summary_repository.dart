@@ -14,6 +14,7 @@ import 'package:summarator/data/model/summary_model.dart';
 import 'package:summarator/domain/entities/summary_entity.dart';
 import 'package:summarator/domain/repos/summary_repository.dart';
 import 'package:summarator/domain/usecases/summary_usecase.dart';
+import 'package:summarator/env.dart';
 
 @LazySingleton(as: ISummaryRepository)
 class SummaryRepository implements ISummaryRepository {
@@ -44,7 +45,7 @@ class SummaryRepository implements ISummaryRepository {
           SummaryConstants.useClustering: payload.useClustering,
         };
         final result =
-            await dio.post('http://192.168.43.221:8080', data: param);
+            await dio.post(environment[CommonConstants.baseUrl]!, data: param);
         final returnValue = SummaryModel(
           key: keyword,
           favorite: false,
@@ -91,7 +92,8 @@ class SummaryRepository implements ISummaryRepository {
       await localDatasource.deleteAll();
       for (SummaryModel data in localData) {
         if (data.key!.contains(SummaryConstants.favorite)) {
-          String keyword = data.key!.replaceAll(SummaryConstants.history, CommonConstants.emptyString);
+          String keyword = data.key!.replaceAll(
+              SummaryConstants.history, CommonConstants.emptyString);
           await shiftSummaryInStorage(data, keyword, true);
         }
       }
@@ -123,7 +125,8 @@ class SummaryRepository implements ISummaryRepository {
     }
   }
 
-  Future<void> shiftSummaryInStorage(Summary summary, String newKeyword, bool favorite) async {
+  Future<void> shiftSummaryInStorage(
+      Summary summary, String newKeyword, bool favorite) async {
     final SummaryModel favorited = SummaryModel(
       key: newKeyword,
       favorite: favorite,

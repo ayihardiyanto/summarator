@@ -13,6 +13,9 @@ class TextFilled extends ActivityState {
   final bool isSummarized;
 
   TextFilled({this.isSummarized = false});
+  // TODO: implement props
+  @override
+  List<Object?> get props => [isSummarized];
   
 }
 
@@ -26,10 +29,18 @@ class FavoriteUpdated extends ActivityState {
   final bool favorite;
 
   FavoriteUpdated({this.favorite = false});
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [favorite];
 }
 
 class FavoriteResultBoxUpdated extends ActivityState {
   final bool favorite;
 
   FavoriteResultBoxUpdated({this.favorite = false});
+
+  // TODO: implement props
+  @override
+  List<Object?> get props => [favorite];
 }
