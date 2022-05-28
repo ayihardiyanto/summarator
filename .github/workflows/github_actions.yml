@@ -53,6 +53,10 @@ jobs:
         run: |
           cd android/ && echo "${{ secrets.KEY_PROPERTIES }}" > key.properties.asc
           gpg --batch --passphrase "${{ secrets.RELEASE_KEYSTORE_PASSPHRASE }}" -d -o key.properties key.properties.asc
+      - name: Extracting env.dart
+        run: |
+          cd lib/ && echo "${{ secrets.ENV }}" > env.dart.asc
+          gpg --batch --passphrase "${{ secrets.RELEASE_KEYSTORE_PASSPHRASE }}" -d -o env.dart env.dart.asc
       - name: Setting up Summarator Dependencies
         run: flutter pub get
       - name: Extract branch name
