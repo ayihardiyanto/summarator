@@ -60,8 +60,8 @@ jobs:
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
       - name: Building Summarator
-    # TODO: change appbundle to ${{ matrix.target }}
-  #     run: flutter build appbundle --release --dart-define=ENV=PROD --build-name=${{steps.extract_branch.outputs.branch}} --build-number=1
+      # TODO: change appbundle to ${{ matrix.target }}
+        run: flutter build appbundle --release --build-name=${{steps.extract_branch.outputs.branch}} --build-number=1
   fastlane-deploy-prod:
     name: Distribute Production App
     runs-on: macos-latest
