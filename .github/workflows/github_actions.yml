@@ -1,4 +1,4 @@
-name: Pex Distribution
+name: Summarator Distribution
 on:
   # Enable manual run
   workflow_dispatch:
