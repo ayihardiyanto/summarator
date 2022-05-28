@@ -48,10 +48,10 @@ class _MyAppState extends State<MyApp> {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle.light.copyWith(statusBarColor: Colors.transparent),
     );
-    WidgetsBinding.instance!.focusManager.primaryFocus?.unfocus();
+    WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
     return GestureDetector(
       onTap: () {
-        WidgetsBinding.instance!.focusManager.primaryFocus?.unfocus();
+        WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
       },
       child: LayoutBuilder(
         builder: (context, constraints) {
