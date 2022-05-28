@@ -1,4 +1,4 @@
-package com.example.summarator
+package com.summarator.app
 
 import io.flutter.embedding.android.FlutterActivity
 
