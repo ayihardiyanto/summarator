@@ -49,3 +49,17 @@ app.*.map.json
 #env
 lib/env.dart
 coverage/
+android/serviceAccountKey.json
+android/*.jks
+*/*.asc
+*.asc
+
+# etc
+.fvm
+pubspec.lock
+
+# google json
+android/app/google-services.json
+
+# Faslane
+android/Gemfile.lock
