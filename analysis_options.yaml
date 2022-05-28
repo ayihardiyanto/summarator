@@ -46,8 +46,8 @@ analyzer:
     - "lib/common/config/injector.iconfig.dart"
     - "lib/data/datasources/local/databases/tables/*.g.dart"
 
-  enable-experiment:
-    - extension-methods
+  # enable-experiment:
+  #   - extension-methods
 
 linter:
   rules:
